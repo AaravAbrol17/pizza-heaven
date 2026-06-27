@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pizza Heaven — Every Slice Feels Like Heaven</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0A0A0A;
+    --card: #141414;
+    --card2: #1C1C1C;
+    --orange: #FF6B00;
+    --orange-light: #FF8C3A;
+    --orange-glow: rgba(255, 107, 0, 0.25);
+    --white: #FFFFFF;
+    --muted: #888888;
+    --green: #2ECC71;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    backdrop-filter: blur(10px);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border); }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 20px var(--orange-glow);
+  }
+  .logo-text { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--white); }
+  .logo-text span { color: var(--orange); }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--orange); color: var(--white);
+    padding: 10px 22px; border-radius: 50px;
+    text-decoration: none; font-size: 0.875rem; font-weight: 600;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px var(--orange-glow);
+  }
+  .nav-cta:hover { background: var(--orange-light); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(255,107,0,0.4); }
+
+  .nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .nav-burger span { width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: 0.3s; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 120px 5% 80px;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(255,107,0,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,0,0.06) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.3);
+    padding: 6px 16px; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 600; color: var(--orange);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-badge::before { content: "●"; font-size: 0.5rem; animation: blink 1.5s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.4rem);
+    font-weight: 900;
+    line-height: 1.08;
+    margin-bottom: 24px;
+  }
+  .hero-title em { font-style: italic; color: var(--orange); }
+
+  .hero-sub {
+    font-size: 1rem; color: var(--muted); line-height: 1.7;
+    max-width: 440px; margin-bottom: 40px;
+  }
+
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 52px; }
+
+  .btn-primary {
+    background: var(--orange); color: var(--white);
+    padding: 14px 32px; border-radius: 50px;
+    text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    box-shadow: 0 6px 28px rgba(255,107,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(255,107,0,0.5); }
+
+  .btn-outline {
+    border: 1px solid var(--border); color: var(--white);
+    padding: 14px 28px; border-radius: 50px;
+    text-decoration: none; font-weight: 500; font-size: 0.95rem;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { border-color: var(--orange); background: rgba(255,107,0,0.08); }
+
+  .hero-stats { display: flex; gap: 36px; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; display: block; }
+  .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+  /* ── PIZZA VISUAL ── */
+  .hero-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+
+  .pizza-glow {
+    position: absolute;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(255,107,0,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  @keyframes pulse-glow { 0%,100%{transform:scale(1);opacity:0.7} 50%{transform:scale(1.1);opacity:1} }
+
+  .pizza-ring {
+    position: absolute;
+    width: 380px; height: 380px;
+    border: 1px solid rgba(255,107,0,0.2);
+    border-radius: 50%;
+    animation: rotate-ring 20s linear infinite;
+  }
+  .pizza-ring::after {
+    content: '';
+    position: absolute; top: -4px; left: 50%;
+    width: 8px; height: 8px;
+    background: var(--orange); border-radius: 50%;
+    transform: translateX(-50%);
+  }
+  @keyframes rotate-ring { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  .pizza-emoji {
+    font-size: 200px;
+    filter: drop-shadow(0 20px 60px rgba(255,107,0,0.5));
+    animation: float-pizza 4s ease-in-out infinite;
+    position: relative; z-index: 2;
+    line-height: 1;
+  }
+  @keyframes float-pizza {
+    0%,100%{transform:translateY(0) rotate(-5deg)}
+    50%{transform:translateY(-18px) rotate(5deg)}
+  }
+
+  .floating-chip {
+    position: absolute;
+    background: var(--card2); border: 1px solid var(--border);
+    padding: 10px 16px; border-radius: 12px;
+    font-size: 0.8rem; font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    white-space: nowrap;
+  }
+  .chip-1 { top: 20%; left: -10%; animation: chip-float 3.5s ease-in-out infinite; }
+  .chip-2 { bottom: 20%; right: -5%; animation: chip-float 4s ease-in-out infinite 0.5s; }
+  .chip-3 { top: 50%; left: -15%; animation: chip-float 3s ease-in-out infinite 1s; }
+  @keyframes chip-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chip-dot.orange { background: var(--orange); }
+  .chip-dot.green { background: var(--green); }
+
+  /* ── MARQUEE ── */
+  .marquee-section {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 25s linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 40px;
+    font-size: 0.85rem; font-weight: 500; color: var(--muted);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    border-right: 1px solid var(--border);
+  }
+  .marquee-item span { color: var(--orange); font-size: 1.1rem; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 100px 5%; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--orange); font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700;
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .section-sub { color: var(--muted); font-size: 1rem; max-width: 480px; }
+
+  /* ── FEATURES ── */
+  #features { background: var(--card); }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px; margin-top: 56px;
+  }
+  .feature-card {
+    background: var(--black); border: 1px solid var(--border);
+    padding: 32px 28px; border-radius: 20px;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .feature-card:hover { border-color: rgba(255,107,0,0.4); transform: translateY(-4px); }
+  .feature-icon { font-size: 2.2rem; margin-bottom: 20px; display: block; }
+  .feature-title { font-weight: 600; font-size: 1rem; margin-bottom: 8px; }
+  .feature-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+  /* ── MENU ── */
+  .menu-header { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-bottom: 48px; }
+  .menu-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+  .tab-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); padding: 8px 20px; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active, .tab-btn:hover { background: var(--orange); border-color: var(--orange); color: var(--white); }
+
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+  .menu-item { display: none; }
+  .menu-item.visible { display: block; }
+
+  .menu-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .menu-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+
+  .menu-card-top {
+    background: var(--card2);
+    height: 160px; display: flex; align-items: center; justify-content: center;
+    font-size: 4.5rem; position: relative; overflow: hidden;
+  }
+  .menu-card-top::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+    background: linear-gradient(transparent, var(--card));
+  }
+
+  .menu-badge {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--orange); color: var(--white);
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;
+    padding: 4px 10px; border-radius: 50px; text-transform: uppercase;
+  }
+  .menu-badge.new { background: var(--green); }
+
+  .menu-card-body { padding: 20px 22px; }
+  .menu-card-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+  .menu-card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+  .menu-card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .menu-price { font-size: 1.1rem; font-weight: 700; color: var(--orange); }
+  .add-btn {
+    background: rgba(255,107,0,0.15); border: 1px solid rgba(255,107,0,0.3);
+    color: var(--orange); width: 36px; height: 36px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; cursor: pointer; transition: all 0.2s;
+    border: none;
+  }
+  .add-btn:hover { background: var(--orange); color: var(--white); }
+
+  /* ── STORY ── */
+  #story { background: var(--card); }
+  .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .story-visual {
+    position: relative;
+    height: 420px; border-radius: 24px; overflow: hidden;
+    background: linear-gradient(135deg, #1a0a00, #2a1200);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .story-emoji { font-size: 120px; filter: drop-shadow(0 10px 40px rgba(255,107,0,0.4)); }
+  .story-year-badge {
+    position: absolute; bottom: 24px; left: 24px;
+    background: rgba(10,10,10,0.85); border: 1px solid var(--border);
+    padding: 16px 20px; border-radius: 14px;
+    backdrop-filter: blur(10px);
+  }
+  .story-year { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--orange); display: block; }
+  .story-year-label { font-size: 0.75rem; color: var(--muted); }
+
+  .story-content p { color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
+  .story-content p strong { color: var(--white); }
+  .story-values { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+  .story-value {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.9rem; color: var(--white);
+  }
+  .story-value::before { content: "✓"; color: var(--green); font-weight: 700; }
+
+  /* ── REVIEWS ── */
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 56px; }
+  .review-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 28px; border-radius: 20px;
+    transition: border-color 0.3s;
+  }
+  .review-card:hover { border-color: rgba(255,107,0,0.3); }
+  .review-stars { color: #FFB800; font-size: 0.9rem; margin-bottom: 14px; letter-spacing: 0.05em; }
+  .review-text { font-size: 0.92rem; color: #CCCCCC; line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+  .review-author { display: flex; align-items: center; gap: 12px; }
+  .review-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card2); border: 2px solid var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .review-name { font-weight: 600; font-size: 0.88rem; }
+  .review-tag { font-size: 0.75rem; color: var(--muted); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--card); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 28px; margin-top: 36px; }
+  .contact-item { display: flex; gap: 18px; align-items: flex-start; }
+  .contact-icon {
+    width: 48px; height: 48px; background: rgba(255,107,0,0.1);
+    border: 1px solid rgba(255,107,0,0.25); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .contact-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .contact-value { font-weight: 500; }
+  .contact-value a { color: var(--white); text-decoration: none; }
+  .contact-value a:hover { color: var(--orange); }
+
+  .hours-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46,204,113,0.3);
+    padding: 8px 16px; border-radius: 50px; font-size: 0.82rem;
+    color: var(--green); font-weight: 600; margin-top: 8px;
+  }
+  .hours-badge::before { content: "●"; font-size: 0.5rem; animation: blink 1.5s ease-in-out infinite; }
+
+  /* Contact Form */
+  .contact-form { background: var(--black); border: 1px solid var(--border); padding: 36px; border-radius: 24px; }
+  .contact-form h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 28px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+  .form-group label { font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+  .form-group input, .form-group textarea, .form-group select {
+    background: var(--card2); border: 1px solid var(--border);
+    color: var(--white); padding: 12px 16px; border-radius: 12px;
+    font-size: 0.92rem; font-family: 'Inter', sans-serif;
+    outline: none; transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--orange); }
+  .form-group textarea { height: 100px; resize: none; }
+  .form-submit {
+    width: 100%; background: var(--orange); color: var(--white);
+    border: none; padding: 14px; border-radius: 12px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .form-submit:hover { background: var(--orange-light); transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 60px 5% 36px;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
+  .footer-brand p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin: 16px 0 24px; max-width: 320px; }
+  .footer-social { display: flex; gap: 12px; }
+  .social-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--card2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .social-btn:hover { background: var(--orange); border-color: var(--orange); }
+
+  .footer-col h4 { font-weight: 600; margin-bottom: 18px; font-size: 0.9rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { color: var(--muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--orange); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border); padding-top: 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { color: var(--muted); font-size: 0.82rem; }
+  .footer-bottom .made { color: var(--muted); font-size: 0.82rem; }
+  .footer-bottom .made span { color: var(--orange); }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .nav-burger { display: flex; }
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { order: -1; min-height: 300px; }
+    .pizza-emoji { font-size: 120px; }
+    .pizza-glow, .pizza-ring { width: 260px; height: 260px; }
+    .floating-chip { display: none; }
+    .story-grid, .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 20px; }
+    section { padding: 72px 5%; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 2.2rem; }
+    .hero-btns { flex-direction: column; }
+    .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px; z-index: 999;
+    background: var(--card2); border: 1px solid var(--orange);
+    padding: 14px 24px; border-radius: 12px;
+    font-size: 0.88rem; font-weight: 500;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── MOBILE NAV MENU ── */
+  .mobile-nav {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 280px; background: var(--card2);
+    z-index: 200; padding: 80px 36px;
+    transform: translateX(100%); transition: transform 0.3s;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .mobile-nav.open { transform: translateX(0); }
+  .mobile-nav a { color: var(--white); text-decoration: none; font-size: 1.1rem; font-weight: 500; }
+  .mobile-nav a:hover { color: var(--orange); }
+  .mobile-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .mobile-overlay.open { opacity: 1; pointer-events: all; }
+  .mobile-close {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: none; color: var(--white);
+    font-size: 1.5rem; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">🍕</div>
+    <span class="logo-text">Pizza <span>Heaven</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#menu" class="nav-cta">Order Now 🍕</a>
+  <div class="nav-burger" id="burgerBtn">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#features">Features</a>
+  <a href="#menu">Menu</a>
+  <a href="#story">Our Story</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#contact">Contact</a>
+  <a href="#menu" style="color:var(--orange); font-weight:700">Order Now →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">Now Open · Amritsar, Punjab</div>
+      <h1 class="hero-title">Every Slice<br>Feels Like<br><em>Heaven.</em></h1>
+      <p class="hero-sub">Handmade dough, fresh vegetables, rich cheese — crafted daily in the heart of Amritsar since 2018. Delivered hot in 30–40 minutes.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn-primary">Explore Menu 🍕</a>
+        <a href="#story" class="btn-outline">Our Story →</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="stat-num">4.9★</span>
+          <span class="stat-label">Rating</span>
+        </div>
+        <div>
+          <span class="stat-num">3,000+</span>
+          <span class="stat-label">Happy Customers</span>
+        </div>
+        <div>
+          <span class="stat-num">30 min</span>
+          <span class="stat-label">Delivery</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="pizza-glow"></div>
+      <div class="pizza-ring"></div>
+      <div class="pizza-emoji">🍕</div>
+      <div class="floating-chip chip-1">
+        <div class="chip-dot orange"></div>
+        Fresh Ingredients Daily
+      </div>
+      <div class="floating-chip chip-2">
+        <div class="chip-dot green"></div>
+        ₹199 – ₹799
+      </div>
+      <div class="floating-chip chip-3">
+        <span>🔥</span>
+        Wood-Fired Taste
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="eyebrow">Why Choose Us</span>
+      <h2 class="section-title">Made with Love,<br>Served with Pride.</h2>
+      <p class="section-sub">We don't cut corners — every pizza is a promise of quality, taste, and joy.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">🌾</span>
+        <div class="feature-title">Fresh Ingredients Daily</div>
+        <p class="feature-desc">We source the finest vegetables, cheeses, and meats every single morning. No compromises on freshness.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🔥</span>
+        <div class="feature-title">Wood-Fired Style Taste</div>
+        <p class="feature-desc">Our unique baking technique gives every crust that authentic charred, smoky flavour you'll keep coming back for.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">Fast Delivery</div>
+        <p class="feature-desc">30 to 40 minutes flat — hot, fresh, and right at your door. Your hunger doesn't wait, and neither do we.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">👨‍👩‍👧‍👦</span>
+        <div class="feature-title">Family Friendly</div>
+        <p class="feature-desc">Cozy ambience and a menu that delights every age — from birthday parties to date nights to family dinners.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-inner">
+    <div class="menu-header reveal">
+      <div>
+        <span class="eyebrow">Our Menu</span>
+        <h2 class="section-title">Crafted for Every Craving</h2>
+        <p class="section-sub">Pizzas, sides, and desserts — all made fresh and priced between ₹199–₹799.</p>
+        <div class="menu-tabs">
+          <button class="tab-btn active" data-tab="all">All</button>
+          <button class="tab-btn" data-tab="pizza">Pizzas</button>
+          <button class="tab-btn" data-tab="extras">Extras</button>
+        </div>
+      </div>
+    </div>
+    <div class="menu-grid" id="menuGrid">
+      <!-- Pizza items -->
+      <div class="menu-item visible pizza">
+        <div class="menu-card">
+          <div class="menu-card-top">🍕<span class="menu-badge">Best Seller</span></div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Margherita Classic</div>
+            <p class="menu-card-desc">Tomato base, fresh mozzarella, basil leaves. Timeless simplicity at its best.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹249</span>
+              <button class="add-btn" onclick="addToast('Margherita Classic')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible pizza">
+        <div class="menu-card">
+          <div class="menu-card-top">🌽<span class="menu-badge">Popular</span></div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Farmhouse Deluxe</div>
+            <p class="menu-card-desc">Loaded with capsicum, corn, mushrooms, black olives and cherry tomatoes on a zesty sauce.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹349</span>
+              <button class="add-btn" onclick="addToast('Farmhouse Deluxe')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible pizza">
+        <div class="menu-card">
+          <div class="menu-card-top">🌶️<span class="menu-badge new">New</span></div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Paneer Tikka Pizza</div>
+            <p class="menu-card-desc">Smoky tikka-marinated paneer, onions, peppers on our signature white sauce. The desi classic.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹399</span>
+              <button class="add-btn" onclick="addToast('Paneer Tikka Pizza')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible pizza">
+        <div class="menu-card">
+          <div class="menu-card-top">🥩</div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Pepperoni Supreme</div>
+            <p class="menu-card-desc">Double-stacked pepperoni, mozzarella flood, oregano crust. For the non-veg loyalists.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹499</span>
+              <button class="add-btn" onclick="addToast('Pepperoni Supreme')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible pizza">
+        <div class="menu-card">
+          <div class="menu-card-top">🍗<span class="menu-badge">Popular</span></div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">BBQ Chicken Pizza</div>
+            <p class="menu-card-desc">Tender BBQ chicken, caramelised onions, smoked cheddar on a bold BBQ sauce base.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹549</span>
+              <button class="add-btn" onclick="addToast('BBQ Chicken Pizza')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible pizza">
+        <div class="menu-card">
+          <div class="menu-card-top">🧀<span class="menu-badge">Signature</span></div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Cheese Burst Volcano</div>
+            <p class="menu-card-desc">A thick cheese-stuffed crust that erupts with molten mozzarella in every bite. Legendary.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹649</span>
+              <button class="add-btn" onclick="addToast('Cheese Burst Volcano')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Extras -->
+      <div class="menu-item visible extras">
+        <div class="menu-card">
+          <div class="menu-card-top" style="font-size:3.5rem">🥖</div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Garlic Bread</div>
+            <p class="menu-card-desc">Crispy toasted baguette with garlic butter and herbs. Perfect starter.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹199</span>
+              <button class="add-btn" onclick="addToast('Garlic Bread')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible extras">
+        <div class="menu-card">
+          <div class="menu-card-top" style="font-size:3.5rem">🍟</div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">French Fries</div>
+            <p class="menu-card-desc">Golden, crispy, lightly salted fries. Great with any pizza.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹149</span>
+              <button class="add-btn" onclick="addToast('French Fries')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible extras">
+        <div class="menu-card">
+          <div class="menu-card-top" style="font-size:3.5rem">🍝</div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Pasta</div>
+            <p class="menu-card-desc">Creamy Alfredo or spicy Arrabbiata — choose your mood.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹279</span>
+              <button class="add-btn" onclick="addToast('Pasta')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible extras">
+        <div class="menu-card">
+          <div class="menu-card-top" style="font-size:3.5rem">☕</div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Cold Coffee</div>
+            <p class="menu-card-desc">Thick, blended cold coffee. Perfectly sweet, perfectly cold.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹149</span>
+              <button class="add-btn" onclick="addToast('Cold Coffee')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible extras">
+        <div class="menu-card">
+          <div class="menu-card-top" style="font-size:3.5rem">🥤</div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Soft Drinks</div>
+            <p class="menu-card-desc">Coke, Sprite, Pepsi, or Limca — ice cold and refreshing.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹79</span>
+              <button class="add-btn" onclick="addToast('Soft Drinks')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-item visible extras">
+        <div class="menu-card">
+          <div class="menu-card-top" style="font-size:3.5rem">🍫<span class="menu-badge new">Fan Fav</span></div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">Chocolate Lava Cake</div>
+            <p class="menu-card-desc">Warm dark chocolate cake with a molten centre. Pure heaven in a ramekin.</p>
+            <div class="menu-card-footer">
+              <span class="menu-price">₹199</span>
+              <button class="add-btn" onclick="addToast('Chocolate Lava Cake')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story">
+  <div class="section-inner">
+    <div class="story-grid">
+      <div class="story-visual reveal">
+        <div class="story-emoji">👨‍🍳</div>
+        <div class="story-year-badge">
+          <span class="story-year">2018</span>
+          <span class="story-year-label">Where it all began</span>
+        </div>
+      </div>
+      <div class="story-content reveal">
+        <span class="eyebrow">Our Story</span>
+        <h2 class="section-title">Started with One<br>Simple Dream.</h2>
+        <p><strong>Pizza Heaven started in 2018</strong> with one simple goal: to serve fresh, delicious pizzas made with premium ingredients at prices every family in Amritsar could afford.</p>
+        <p>What began as a small kitchen experiment turned into a beloved local landmark. Today, we're known not just for the food, but for the warmth, the laughter, and the community that gathers around our tables every day.</p>
+        <p>Our <strong>handmade dough is prepared fresh every morning</strong>. Our vegetables are sourced locally. Our cheese is imported for that perfect melt. Every pizza is made to order, never sitting under a heat lamp.</p>
+        <div class="story-values">
+          <div class="story-value">Handmade dough — crafted fresh every single morning</div>
+          <div class="story-value">Premium ingredients, sourced locally where possible</div>
+          <div class="story-value">No compromise — every pizza made to order</div>
+          <div class="story-value">Serving Amritsar with love since 2018</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="eyebrow">Customer Reviews</span>
+      <h2 class="section-title">3,000+ Happy Customers<br>Can't Be Wrong.</h2>
+      <p class="section-sub">Real words from real people who came for the pizza and stayed for the love.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The Cheese Burst Volcano is not just a pizza — it's an experience. The cheese just pours out and I genuinely said wow out loud. Best pizza in Amritsar, no contest."</p>
+        <div class="review-author">
+          <div class="review-avatar">👨</div>
+          <div>
+            <div class="review-name">Arjun Sharma</div>
+            <div class="review-tag">Regular Customer · Amritsar</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"We ordered for our family birthday party — 4 large pizzas, garlic bread, and lava cakes. Everything arrived hot in 35 minutes. Presentation was beautiful. Will always order from here!"</p>
+        <div class="review-author">
+          <div class="review-avatar">👩</div>
+          <div>
+            <div class="review-name">Priya Bhatia</div>
+            <div class="review-tag">Birthday Party Order</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"As a college student, I need something affordable but actually good. Pizza Heaven's ₹249 Margherita hits every time. The crust is chef's kiss — crispy outside, soft inside."</p>
+        <div class="review-author">
+          <div class="review-avatar">🧑</div>
+          <div>
+            <div class="review-name">Rohan Kapoor</div>
+            <div class="review-tag">College Student · Weekly Customer</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Took my partner here for date night. The ambience, the food, the service — everything was perfect. The Paneer Tikka Pizza is honestly a masterpiece. Already planning our next visit."</p>
+        <div class="review-author">
+          <div class="review-avatar">👰</div>
+          <div>
+            <div class="review-name">Simran Kaur</div>
+            <div class="review-tag">Date Night · Dine-in</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"BBQ Chicken Pizza is insane. The BBQ sauce base is smoky and rich, and the chicken pieces are so tender. I've tried every pizza place in town and this is my #1. Loyal customer for life."</p>
+        <div class="review-author">
+          <div class="review-avatar">👦</div>
+          <div>
+            <div class="review-name">Karan Mehta</div>
+            <div class="review-tag">Food Enthusiast</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"My kids ask for Pizza Heaven every weekend now — it's become a family tradition. Love that the prices are reasonable and the portions are generous. And the lava cake? We fight over it every time!"</p>
+        <div class="review-author">
+          <div class="review-avatar">👩‍👦</div>
+          <div>
+            <div class="review-name">Neha Puri</div>
+            <div class="review-tag">Family Regular · Every Weekend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="eyebrow">Get in Touch</span>
+      <h2 class="section-title">We're Always Here<br>for You.</h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info">
+          <div class="contact-item reveal">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-label">Location</div>
+              <div class="contact-value">Amritsar, Punjab, India</div>
+            </div>
+          </div>
+          <div class="contact-item reveal">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-label">Phone</div>
+              <div class="contact-value"><a href="tel:+919876543210">+91 98765 43210</a></div>
+            </div>
+          </div>
+          <div class="contact-item reveal">
+            <div class="contact-icon">✉️</div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-value"><a href="mailto:hello@pizzaheaven.in">hello@pizzaheaven.in</a></div>
+            </div>
+          </div>
+          <div class="contact-item reveal">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <div class="contact-label">Opening Hours</div>
+              <div class="contact-value">Monday – Sunday</div>
+              <div class="contact-value" style="color:var(--muted); font-size:0.88rem">11:00 AM – 11:00 PM</div>
+              <div class="hours-badge">Open Now</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-form">
+          <h3>Place a Special Order 🍕</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" placeholder="Arjun Sharma"/>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" placeholder="+91 98765 00000"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>What would you like?</label>
+            <select>
+              <option>Margherita Classic</option>
+              <option>Farmhouse Deluxe</option>
+              <option>Paneer Tikka Pizza</option>
+              <option>Pepperoni Supreme</option>
+              <option>BBQ Chicken Pizza</option>
+              <option>Cheese Burst Volcano</option>
+              <option>Mixed / Large Order</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Special Instructions</label>
+            <textarea placeholder="Extra cheese, less spicy, birthday message on the box..."></textarea>
+          </div>
+          <button class="form-submit" onclick="submitForm()">Send Order Request 🍕</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="margin-bottom:4px">
+          <div class="logo-icon">🍕</div>
+          <span class="logo-text">Pizza <span>Heaven</span></span>
+        </a>
+        <p>Every slice feels like heaven. Serving Amritsar with handcrafted pizzas, fresh ingredients, and warm hospitality since 2018.</p>
+        <div class="footer-social">
+          <a class="social-btn" href="#" title="Instagram">📸</a>
+          <a class="social-btn" href="#" title="Facebook">👍</a>
+          <a class="social-btn" href="#" title="WhatsApp">💬</a>
+          <a class="social-btn" href="#" title="YouTube">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Menu</h4>
+        <ul>
+          <li><a href="#menu">Signature Pizzas</a></li>
+          <li><a href="#menu">Garlic Bread</a></li>
+          <li><a href="#menu">Pasta</a></li>
+          <li><a href="#menu">Desserts</a></li>
+          <li><a href="#menu">Drinks</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#story">Our Story</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#features">Why Us</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="tel:+919876543210">Call to Order</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Pizza Heaven, Amritsar. All rights reserved.</p>
+      <p class="made">Made with <span>♥</span> in Punjab, India</p>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── NAVBAR SCROLL ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── MOBILE NAV ──
+  const burger = document.getElementById('burgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  const overlay = document.getElementById('mobileOverlay');
+  const closeBtn = document.getElementById('mobileClose');
+
+  function openNav() { mobileNav.classList.add('open'); overlay.classList.add('open'); }
+  function closeNav() { mobileNav.classList.remove('open'); overlay.classList.remove('open'); }
+
+  burger.addEventListener('click', openNav);
+  closeBtn.addEventListener('click', closeNav);
+  overlay.addEventListener('click', closeNav);
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+
+  // ── MARQUEE ──
+  const marqueeItems = [
+    { icon: '🍕', text: 'Fresh Dough Daily' },
+    { icon: '🔥', text: 'Wood-Fired Taste' },
+    { icon: '⭐', text: '4.9 Star Rating' },
+    { icon: '🚀', text: '30 Min Delivery' },
+    { icon: '👨‍👩‍👧‍👦', text: 'Family Friendly' },
+    { icon: '🧀', text: 'Premium Cheese' },
+    { icon: '🌿', text: 'Fresh Vegetables' },
+    { icon: '💰', text: '₹199 – ₹799' },
+    { icon: '📍', text: 'Amritsar, Punjab' },
+    { icon: '🎉', text: 'Birthday Parties' },
+  ];
+
+  const track = document.getElementById('marqueeTrack');
+  const doubled = [...marqueeItems, ...marqueeItems];
+  track.innerHTML = doubled.map(i =>
+    `<div class="marquee-item"><span>${i.icon}</span>${i.text}</div>`
+  ).join('');
+
+  // ── MENU TABS ──
+  const tabs = document.querySelectorAll('.tab-btn');
+  const items = document.querySelectorAll('.menu-item');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.tab;
+      items.forEach(item => {
+        if (filter === 'all' || item.classList.contains(filter)) {
+          item.classList.add('visible');
+        } else {
+          item.classList.remove('visible');
+        }
+      });
+    });
+  });
+
+  // ── TOAST ──
+  function addToast(name) {
+    const toast = document.getElementById('toast');
+    toast.textContent = `🍕 ${name} added to order!`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // ── FORM SUBMIT ──
+  function submitForm() {
+    addToast('Special order request sent! We\'ll call you shortly.');
+  }
+
+  // ── SCROLL REVEAL ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
